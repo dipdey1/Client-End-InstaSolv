@@ -21,7 +21,7 @@ function App() {
         <Route element={<PrivateRoutes/>}>
           <Route path='/home' element={<Home />}/>
           <Route path='/history' element={<Home />}/>
-          <Route path='/Profile' element={<Home />}/>
+          <Route path='/profile' element={<Home />}/>
         </Route>
         
       </Routes>

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { useAuth } from '../../Utils/Context/AuthContext'
-import { useNavigate } from 'react-router-dom'
-import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
-import"./login.scss"
+import { Link, useNavigate } from 'react-router-dom'
+import { Button, Form, Grid, Header, Image, Segment } from "semantic-ui-react";
+import './login.scss'
+import { styleLoginInput, styleLoginbutton, stylesLogin, stylesLoginForm } from '../../assets/styles';
 
 const Login = () => {
     const {user, handleUserLogin} = useAuth()
@@ -28,17 +29,21 @@ const Login = () => {
     },[])
 
   return (
-    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
+    <Grid textAlign="center" style={stylesLogin} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          Log-in to your account
-        </Header>
-        <Form size="large" onSubmit={(e) => handleUserLogin(e, credentials)}>
-          <Segment stacked>
+        <Form size="massive" onSubmit={(e) => handleUserLogin(e, credentials)} style={{border:'none'}}>
+          <Segment stacked style={stylesLoginForm}>
+            <Header as="h1" color="#213555" textAlign="center">
+              Development
+            </Header>
+            <Header as="h4" color="#213555" textAlign="center">
+              log in to your account
+            </Header>
             <Form.Input
               fluid
               icon="user"
               name='email'
+              style={styleLoginInput}
               iconPosition="left"
               placeholder="Enter your email"
               value={credentials.email}
@@ -48,6 +53,7 @@ const Login = () => {
               fluid
               icon="lock"
               name='password'
+              style={styleLoginInput}
               iconPosition="left"
               placeholder="Enter your password"
               type="password"
@@ -55,10 +61,14 @@ const Login = () => {
               onChange={handleCredentials}
             />
 
-            <Button color="teal" fluid size="large">
-              Login
+            <Button fluid className='login-btn' size="small" style={styleLoginbutton}>
+              SIGN IN
             </Button>
+            <p>Don't have an account yet? <Link to='/register'>Register</Link></p>
+            <p style={{marginTop: '-15px'}}>Forgot password? <Link>Reset</Link></p>
+            <p style={{marginTop: '55px'}}>All rights reserved.</p>
           </Segment>
+          
         </Form>
       </Grid.Column>
     </Grid>
@@ -66,7 +76,3 @@ const Login = () => {
 }
 
 export default Login
-
-
-
-
