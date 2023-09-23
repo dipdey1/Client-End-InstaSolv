@@ -40,34 +40,30 @@ const AskDoubts = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const now = Math.floor(Date.now())
-        const thirtyMinutesAgo = now - 1800000
-        const response = account.listLogs()
-        console.log(response);
-        // let promise = await storage.createFile(DOUBT_STORAGE_BUCKET_ID, ID.unique(), picture)
-        // let payloadObject = {
-        //     'userId': user.$id,
-        //     'name': user.name,
-        //     'status': 'ongoing',
-        //     'solutionType' : solutionType,
-        //     'subject' : subject,
-        //     'chapter' : chapter,
-        //     'body' : body,
-        //     'pictureID': promise.$id
-        // }
-        // let response = await databases.createDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,ID.unique(), payloadObject)
-        // let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
-        // const totalpool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === false).map(obj => obj.$id)
-        // const poolLength = Math.floor((totalpool.length)/3) + 1
-        // const poolOne = totalpool.slice(0,poolLength)
-        // poolOneHelper(response,poolOne,subject)
+        let promise = await storage.createFile(DOUBT_STORAGE_BUCKET_ID, ID.unique(), picture)
+        let payloadObject = {
+            'userId': user.$id,
+            'name': user.name,
+            'status': 'ongoing',
+            'solutionType' : solutionType,
+            'subject' : subject,
+            'chapter' : chapter,
+            'body' : body,
+            'pictureID': promise.$id
+        }
+        let response = await databases.createDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,ID.unique(), payloadObject)
+        let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
+        const totalpool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === true).map(obj => obj.$id)
+        const poolLength = Math.floor((totalpool.length)/3)+1
+        const poolOne = totalpool.slice(0,poolLength)
+        poolOneHelper(response,poolOne,subject)
 
-        // setBody('')
-        // setChapter('')
-        // setPicture(null)
-        // setSubject('')
-        // setSolutionType('')
-        // setPictureView(null)  
+        setBody('')
+        setChapter('')
+        setPicture(null)
+        setSubject('')
+        setSolutionType('')
+        setPictureView(null)  
     }
        
     return (<>

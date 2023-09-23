@@ -5,7 +5,6 @@ import { useAuth } from "./Context/AuthContext";
 
 export const poolOneHelper = async (response, poolOne,subject) => {
             let payload = {
-                routingStatus: true, 
                 doubtID: response.$id
             }
             for(let i=0; i<poolOne.length; i++){
@@ -19,7 +18,7 @@ export const poolOneHelper = async (response, poolOne,subject) => {
                 }else{
                     flag=true
                 }
-            },10000)
+            },300000)
 }
 
 export const poolOneHelperCleanup = async (response,poolOne,subject) => {
@@ -27,7 +26,6 @@ export const poolOneHelperCleanup = async (response,poolOne,subject) => {
         let secondresponse = await databases.getDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,response.$id)
         if(secondresponse.status === 'ongoing'){
         let deleteRouting = {
-            routingStatus: false, 
             doubtID: null
         }
         for(let i=0; i<poolOne.length; i++){
@@ -35,7 +33,7 @@ export const poolOneHelperCleanup = async (response,poolOne,subject) => {
         }
             }
             let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
-            const totalPoolTwoPool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === false).map(obj => obj.$id)
+            const totalPoolTwoPool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === true).map(obj => obj.$id)
             const totalPoolTwo = totalPoolTwoPool.filter(item => !poolOne.includes(item))
             const poolLength = Math.floor((totalPoolTwoPool.length)/3) + 1
             const poolTwo = totalPoolTwo.slice(0,poolLength)
@@ -48,7 +46,6 @@ export const poolOneHelperCleanup = async (response,poolOne,subject) => {
 
 export const poolTwoHelper = async (response, poolTwo,subject,poolOne) => {
     let payload = {
-        routingStatus: true, 
         doubtID: response.$id
     }
     for(let i=0; i<poolTwo.length; i++){
@@ -62,7 +59,7 @@ export const poolTwoHelper = async (response, poolTwo,subject,poolOne) => {
         }else{
             flag=true
         }
-    },10000)
+    },300000)
 }
 
 export const poolTwoeHelperCleanup = async (response,poolTwo,subject,poolOne) => {
@@ -70,7 +67,6 @@ export const poolTwoeHelperCleanup = async (response,poolTwo,subject,poolOne) =>
         let secondresponse = await databases.getDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,response.$id)
         if(secondresponse.status === 'ongoing'){
         let deleteRouting = {
-            routingStatus: false, 
             doubtID: null
         }
         for(let i=0; i<poolTwo.length; i++){
@@ -79,7 +75,7 @@ export const poolTwoeHelperCleanup = async (response,poolTwo,subject,poolOne) =>
             }
             let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
             const exclusionPool = poolOne.concat(poolTwo)
-            const totalPoolThree = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === false).map(obj => obj.$id).filter(item => !exclusionPool.includes(item))
+            const totalPoolThree = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === true).map(obj => obj.$id).filter(item => !exclusionPool.includes(item))
 
             poolThreeHelper(response,totalPoolThree,subject)
     } catch (error) {
@@ -88,8 +84,7 @@ export const poolTwoeHelperCleanup = async (response,poolTwo,subject,poolOne) =>
 }
 
 export const poolThreeHelper = async (response, totalPoolThree,subject) => {
-    let payload = {
-        routingStatus: true, 
+    let payload = { 
         doubtID: response.$id
     }
     for(let i=0; i<totalPoolThree.length; i++){
@@ -103,19 +98,18 @@ export const poolThreeHelper = async (response, totalPoolThree,subject) => {
         }else{
             flag=true
         }
-    },10000)
+    },300000)
 }
 
 export const poolThreeHelperCleanup = async (response,totalPoolThree,subject) => {
     try {
         let secondresponse = await databases.getDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,response.$id)
         if(secondresponse.status === 'ongoing'){
-        let deleteRouting = {
-            routingStatus: false, 
+        let deleteID = {
             doubtID: null
         }
         for(let i=0; i<totalPoolThree.length; i++){
-            let activePromise = await databases_2.updateDocument(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,totalPoolThree[i],deleteRouting)
+            let activePromise = await databases_2.updateDocument(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,totalPoolThree[i],deleteID)
         }
         let finalresponse = await databases.updateDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,response.$id, {status: 'Retry'})
     }

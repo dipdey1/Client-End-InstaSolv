@@ -21,26 +21,26 @@ const Home = () => {
     
   },[])
 
-  const logoutTimerIdRef = useRef(null);
+  // const logoutTimerIdRef = useRef(null);
   
-    useEffect(() => {
-      const autoLogout = () => {
-        console.log(document.visibilityState);
-      if (document.visibilityState === 'hidden') {
-        const timeOutId = window.setTimeout(handleUserLogout, 30* 60 * 1000);
-        logoutTimerIdRef.current = timeOutId;
+  //   useEffect(() => {
+  //     const autoLogout = () => {
+  //       console.log(document.visibilityState);
+  //     if (document.visibilityState === 'hidden') {
+  //       const timeOutId = window.setTimeout(handleUserLogout, 30* 60 * 1000);
+  //       logoutTimerIdRef.current = timeOutId;
 
-      } else {
-        window.clearTimeout(logoutTimerIdRef.current);
-      }
-    };
+  //     } else {
+  //       window.clearTimeout(logoutTimerIdRef.current);
+  //     }
+  //   };
 
-    document.addEventListener('visibilitychange', autoLogout);
+  //   document.addEventListener('visibilitychange', autoLogout);
 
-    return () => {
-      document.removeEventListener('visibilitychange', autoLogout);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener('visibilitychange', autoLogout);
+  //   };
+  // }, []);
   
   return (
         <>
