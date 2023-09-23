@@ -3,11 +3,12 @@ import './Navbar.scss'
 import { Menu, Segment, Button } from 'semantic-ui-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Utils/Context/AuthContext'
+import { navbarLogout, navbarVerification } from '../../assets/styles'
 
 const NavbarComponent = () => {
 
     const [activeItem, setActiveItem] = useState()
-    const {user, handleUserLogout} = useAuth()
+    const {user, handleUserLogout, handleVerification} = useAuth()
     const navigate = useNavigate()
 
     const handleItemClick = (e, { name }) => {
@@ -35,10 +36,14 @@ const NavbarComponent = () => {
           onClick={handleItemClick}
           position='left'
         />
-        {
-          user ? (<div><span> Welcome {user.name}</span><Button onClick={handleUserLogout}>Log Out</Button></div>):(<div><Button>Login</Button></div>)
-        }
-      </Menu>
+        <div>
+        <p style={{display: 'inline', marginRight: '20px'}}>Welcome, {user.name}  </p>
+        <div  style={{display: 'inline'}}>
+        <Button style={navbarLogout} onClick={handleUserLogout} >Log Out</Button>
+        {(!user.emailVerification)? <Button style={navbarVerification} onClick={handleVerification}>Verify Email</Button>: null}
+        </div>
+        </div>
+        </Menu>
         
     </Segment>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card,Image,Grid } from 'semantic-ui-react'
+import { Card,Image,Grid, Button } from 'semantic-ui-react'
 import { useState } from 'react'
 import './DoubtCards.scss'
 import client, { storage,databases, DATABASE_ID, USERDOUBTS_COLLECTION_ID, DOUBT_STORAGE_BUCKET_ID } from '../../../appwriteConfig'
@@ -70,9 +70,7 @@ const CardType = () => {
             </Card.Description>
             </Card.Content>
             <Card.Content extra>
-            <a>
-                Doubt Status: {doubt.status}
-            </a>
+            {((doubt.status) === 'ongoing') ? <span>Ongoing</span> : ((doubt.status) === 'accepted') ? <Button>End Doubt</Button> : <Button>Retry</Button>}
             </Card.Content>
             </Card>
             </Grid.Column>

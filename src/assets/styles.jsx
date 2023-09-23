@@ -32,7 +32,7 @@ export const styleLoginbutton = {
     color:'#213555',
     marginLeft: '25%',
     marginTop: '10px',
-    marginBottom: '10px'
+    marginBottom: '10px',
 
 }
 export const stylesRegisterForm = {
@@ -64,4 +64,32 @@ export const styleRegisterbutton = {
     marginTop: '10px',
     marginBottom: '10px'
 
+}
+
+export const iconSizeGoogle = {
+    fontSize: '35px',
+    margin:"0px 10px",
+    borderRadius:'50%',
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+}
+export const iconSizeApple = {
+    fontSize: '25px',
+    margin:"0px 10px",
+}
+
+export const divTag = {
+   
+}
+
+export const navbarLogout = {
+    color: '#C63D2F',
+    backgroundColor:'#040D12',
+    marginRight: '10px',
+    width: '120px'
+}
+
+export const navbarVerification = {
+    color: '#213555',
+    backgroundColor: '#F8DE22',
+    width: '120px'
 }

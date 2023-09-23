@@ -16,7 +16,6 @@ const Register = () => {
 
   const handleRegisterinfo = (e, {name}) => {
     setRegisterInfo({...registerInfo, [name] :e.target.value})
-    console.log(registerInfo)
   }
 
   
@@ -26,10 +25,10 @@ const Register = () => {
       <Grid.Column style={{ maxWidth: 450 }}>
         <Form size="large" onSubmit={(e) => handleRegister(e,registerInfo)} style={{border:'none'}}>
           <Segment stacked style={stylesRegisterForm}>
-          <Header as="h1" color="#213555" textAlign="center">
+          <Header as="h1" color="black" textAlign="center">
                   Development
                 </Header>
-              <Header as="h4" color="#213555" textAlign="center">
+              <Header as="h4" color="black" textAlign="center">
                 Register a new account
               </Header>
             <Form.Input

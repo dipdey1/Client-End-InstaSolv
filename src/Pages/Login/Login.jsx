@@ -2,11 +2,13 @@ import React, {useState, useEffect} from 'react'
 import { useAuth } from '../../Utils/Context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Form, Grid, Header, Image, Segment } from "semantic-ui-react";
+import { FcGoogle } from 'react-icons/fc';
+import { BsApple } from 'react-icons/bs';
 import './login.scss'
-import { styleLoginInput, styleLoginbutton, stylesLogin, stylesLoginForm } from '../../assets/styles';
+import { iconSizeApple, iconSizeGoogle, styleLoginInput, styleLoginbutton, stylesLogin, stylesLoginForm } from '../../assets/styles';
 
 const Login = () => {
-    const {user, handleUserLogin} = useAuth()
+    const {user, handleUserLogin, handleOauth2Login} = useAuth()
     const navigate = useNavigate()
 
     const [credentials, setCredentials] = useState({
@@ -33,10 +35,10 @@ const Login = () => {
       <Grid.Column style={{ maxWidth: 450 }}>
         <Form size="massive" onSubmit={(e) => handleUserLogin(e, credentials)} style={{border:'none'}}>
           <Segment stacked style={stylesLoginForm}>
-            <Header as="h1" color="#213555" textAlign="center">
+            <Header as="h1" textAlign="center">
               Development
             </Header>
-            <Header as="h4" color="#213555" textAlign="center">
+            <Header as="h4" textAlign="center">
               log in to your account
             </Header>
             <Form.Input
@@ -61,12 +63,19 @@ const Login = () => {
               onChange={handleCredentials}
             />
 
-            <Button fluid className='login-btn' size="small" style={styleLoginbutton}>
+            <Button fluid className='login-btn' size="large" style={styleLoginbutton}>
               SIGN IN
             </Button>
             <p>Don't have an account yet? <Link to='/register'>Register</Link></p>
-            <p style={{marginTop: '-15px'}}>Forgot password? <Link>Reset</Link></p>
-            <p style={{marginTop: '55px'}}>All rights reserved.</p>
+            <p style={{marginTop: '-10px'}}>Forgot password? <Link>Reset</Link></p>
+            <div>
+              <span>Sign in with</span> 
+              <FcGoogle style={iconSizeGoogle} 
+              onClick={handleOauth2Login}
+              /> 
+            </div>
+
+            {/* <p style={{marginTop: 'px'}}>All rights reserved.</p> */}
           </Segment>
           
         </Form>
