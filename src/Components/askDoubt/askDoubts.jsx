@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Button, Container, Form, Header, Select, TextArea } from 'semantic-ui-react'
 import { solOptions, subjectOptions, chapterOptions } from '../../assets/staticData'
-import { DATABASE_ID, USERDOUBTS_COLLECTION_ID, databases, storage, DOUBT_STORAGE_BUCKET_ID, account } from '../../../appwriteConfig'
+import client, { DATABASE_ID, USERDOUBTS_COLLECTION_ID, databases, storage, DOUBT_STORAGE_BUCKET_ID, account } from '../../../appwriteConfig'
 import { ID, Query } from 'appwrite'
 import './askDoubts.scss'
 import { useAuth } from '../../Utils/Context/AuthContext'
-import { ACTIVE_DEX_COLLECTION_ID, DATABASE_ID_DEX, databases_2 } from '../../../appwriteConfigDex'
-import { poolOneHelper, poolTwoHelper } from '../../Utils/HelperFunctions'
+import client2, { ACTIVE_DEX_COLLECTION_ID, DATABASE_ID_DEX, databases_2 } from '../../../appwriteConfigDex'
 
 const AskDoubts = () => {
 
@@ -16,7 +15,7 @@ const AskDoubts = () => {
     const [body, setBody] = useState('')
     const [picture, setPicture] = useState(null);
     const [pictureView, setPictureView] = useState(null)
-    const {user} = useAuth()
+    const {user, poolOneHelper, currentPool, doubtID, deleteRouting} = useAuth()
 
     
 
@@ -52,11 +51,12 @@ const AskDoubts = () => {
             'pictureID': promise.$id
         }
         let response = await databases.createDocument(DATABASE_ID,USERDOUBTS_COLLECTION_ID,ID.unique(), payloadObject)
-        let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
-        const totalpool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === true).map(obj => obj.$id)
-        const poolLength = Math.floor((totalpool.length)/3)+1
-        const poolOne = totalpool.slice(0,poolLength)
-        poolOneHelper(response,poolOne,subject)
+        // let responsePool = await databases_2.listDocuments(DATABASE_ID_DEX,ACTIVE_DEX_COLLECTION_ID,[Query.equal('dexSpeciality',subject),Query.orderDesc('score')])
+        // const totalpool = responsePool.documents.filter(item => item.onboardingStatus === true && item.onlineStatus === true && item.solvingStatus === false && item.routingStatus === true && item.currentRoutingStatus === false).map(obj => obj.$id)
+        // const poolLength = Math.floor((totalpool.length)/3)+1
+        // const poolOne = totalpool.slice(0,poolLength)
+        // poolOneHelper(response,poolOne,subject)
+        poolOneHelper(response,subject)
 
         setBody('')
         setChapter('')
@@ -65,6 +65,22 @@ const AskDoubts = () => {
         setSolutionType('')
         setPictureView(null)  
     }
+
+    useEffect(() => {
+
+        const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${USERDOUBTS_COLLECTION_ID}.documents.${doubtID}`, response => {
+            if(response.events.includes("databases.*.collections.*.documents.*.update")){
+                console.log('I am listening');
+                if(response.payload.status === 'accepted'){
+                    deleteRouting(currentPool)
+                }
+            }
+        })
+        return () => {
+            unsubscribe()
+        }
+
+    },[currentPool, doubtID])
        
     return (<>
         {(user.emailVerification) ?  
